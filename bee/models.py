@@ -8,14 +8,17 @@ from django.db import models
 
 class Queen(models.Model):
     #  Пчелиная матка
-    year = models.IntegerField(max_length=4)
+    year = models.IntegerField()
     title = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return '%s, %s' % (self.year, self.title)
 
 
 class Beehive(models.Model):
     #  Улий
-    number = models.IntegerField(max_length=2)
+    number = models.IntegerField()
     row_num = models.CharField(max_length=20)
     queen = models.ForeignKey(Queen, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=100)
@@ -48,12 +51,25 @@ class Beehive(models.Model):
     volume = models.CharField(max_length=1, choices=VOLUME_STATUS, blank=True, default=1)
     pub_date = models.DateField(default=date.today)
 
+    class Meta:
+        ordering = ['number']
+
+    def __str__(self):
+        return '%s, %s' % (self.number, self.title)
+
+
 
 class Action(models.Model):
     #  Действие выполненное с улием (ПС)
     beehive = models.ForeignKey(Beehive, on_delete=models.CASCADE)
     text = models.TextField(max_length=1000)
     post_date = models.DateField(default=date.today)
+
+    class Meta:
+        ordering = ['post_date']
+
+    def __str__(self):
+        return self.text
 
 
 class Reminder(models.Model):
@@ -62,3 +78,6 @@ class Reminder(models.Model):
     text = models.TextField(max_length=1000)
     post_date = models.DateField(default=date.today)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.text
