@@ -15,8 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.generic import RedirectView
+
+from bee.views import RegisterFormView, UserProfile, UpdateProfile
 
 urlpatterns = [
+    path("", RedirectView.as_view(url="/bee/")),
     path('admin/', admin.site.urls),
+    path('bee/', include('bee.urls')),
+
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/register/', RegisterFormView.as_view(), name="register"),
+    path('accounts/my_profile/', UserProfile.as_view(), name="profile"),
+    path('accounts/update_profile/', UpdateProfile.as_view(), name="update_profile"),
+
+
 ]
