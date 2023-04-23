@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ beehive }}</h1>
+    {% if request.user.is_authenticated  %}
+        <li><a href="{% url 'beehive_update' beehive.pk %}">Beehive update</a></li>
+    {% endif %}
+____________________
+  <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>
+____________________
+   <p> <strong>Дата создания: </strong> {{ beehive.pub_date }} </p>
+<!--   <p> <strong>Номер ПС: </strong> {{ beehive.number }} </p>-->
+   <p> <strong>Ряд: </strong> {{ beehive.row }} </p>
+   <p> <strong>Матка: </strong> {{ beehive.queen }} </p>
+   <p> <strong>Количество корпусов: </strong> {{ beehive.get_volume_display }} </p>
+   <p> <strong>Тип улья: </strong> {{ beehive.get_type_hive_display}} </p>
+
+
+   <p><strong>Описание:</strong> {{ beehive.text }}</p>
+<!--   <p>{{ beehive.text }}</p>-->
+  <li><a href="{% url 'action_create' beehive.id %}">Новое событие</a></li>
+____________________________________________
+
+  <p><strong>Action:</strong></p>
+
+    {% for action in beehive.action_set.all %}
+
+    <p><strong>{{action.post_date}}:</strong> {{action.text}}</p>
+
+    {% endfor %}
+
+
+{% endblock %}

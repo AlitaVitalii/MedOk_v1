@@ -1,0 +1,39 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Список ПС</h1>
+
+    <ul class="sidebar-nav">
+            <li><a href="{% url 'beehive_create' %}">Новая ПС</a></li>
+    </ul>
+
+    {% if beehive_list %}
+    <ul>
+    <table class="table table-striped">
+         <tr>
+    <th>ПС</th>
+    <th>Ряд</th>
+    <th>Матка</th>
+    <th>Title</th>
+    <th>К-во корп.</th>
+
+           </tr>
+
+      {% for beehive in beehive_list %}
+          <tr>
+              <td><a href="{{ beehive.get_absolute_url }}">{{ beehive.number }}</a> </td>
+              <td>{{beehive.row}} </td>
+              <td>{{beehive.queen}}</td>
+              <td>{{beehive.title}}</td>
+              <td>{{beehive.get_volume_display}}</td>
+          </tr>
+
+      {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+      <p>нет пс...</p>
+    {% endif %}
+{% endblock %}

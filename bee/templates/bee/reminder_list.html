@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Напоминания</h1>
+
+    <ul class="sidebar-nav">
+            <li><a href="{% url 'rem_create' %}">Новое напоминание</a></li>
+    </ul>
+
+    {% if reminder_list %}
+    <ul>
+    <table class="table table-striped">
+         <tr>
+    <th>beehive</th>
+    <th>Текст</th>
+    <th>is_active</th>
+
+           </tr>
+
+      {% for reminder in reminder_list %}
+          <tr>
+              <td><a href="{{ reminder.get_absolute_url }}">{{ reminder.beehive }}</a> </td>
+              <td>{{reminder.text}} </td>
+              <td>{{reminder.is_active}} </td>
+
+          </tr>
+
+      {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+      <p>нет row...</p>
+    {% endif %}
+{% endblock %}

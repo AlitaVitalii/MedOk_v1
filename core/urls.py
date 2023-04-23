@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
@@ -29,6 +30,10 @@ urlpatterns = [
     path('accounts/register/', RegisterFormView.as_view(), name="register"),
     path('accounts/my_profile/', UserProfile.as_view(), name="profile"),
     path('accounts/update_profile/', UpdateProfile.as_view(), name="update_profile"),
-
-
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ]

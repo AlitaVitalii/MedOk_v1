@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Ряды</h1>
+
+    <ul class="sidebar-nav">
+            <li><a href="{% url 'row_create' %}">Новый ряд</a></li>
+    </ul>
+
+    {% if row_list %}
+    <ul>
+    <table class="table table-striped">
+         <tr>
+    <th>Название</th>
+           </tr>
+
+      {% for row in row_list %}
+          <tr>
+              <td><a href="{{ row.get_absolute_url }}">{{ row }}</a> </td>
+
+          </tr>
+
+      {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+      <p>нет row...</p>
+    {% endif %}
+{% endblock %}

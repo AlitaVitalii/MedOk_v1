@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ action.beehive }}</h1>
+    {% if request.user.is_authenticated  %}
+        <li><a href="{% url 'action_update' action.pk %}">Action update</a></li>
+    {% endif %}
+   <p> <strong>Дата: </strong> {{ action.post_date }} </p>
+   <p> <strong>Описание: </strong> {{ action.text }} </p>
+
+
+
+{% endblock %}

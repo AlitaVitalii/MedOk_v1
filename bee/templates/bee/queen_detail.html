@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ queen }}</h1>
+    {% if request.user.is_authenticated  %}
+        <li><a href="{% url 'queen_update' queen.pk %}">Queen update</a></li>
+    {% endif %}
+   <p> <strong>Год: </strong> {{ queen.year }} </p>
+   <p> <strong>Описание: </strong> {{ queen.title }} </p>
+   <p> <strong>is_active: </strong> {{ queen.is_active }} </p>
+
+
+
+
+{% endblock %}

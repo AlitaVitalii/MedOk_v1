@@ -1,0 +1,38 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Список Маток</h1>
+
+    <ul class="sidebar-nav">
+            <li><a href="{% url 'queen_create' %}">Новая Матка</a></li>
+    </ul>
+
+    {% if queen_list %}
+    <ul>
+    <table class="table table-striped">
+         <tr>
+    <th>Матка</th>
+    <th>is_active</th>
+    <th>Изменить</th>
+
+
+           </tr>
+
+      {% for queen in queen_list %}
+          <tr>
+              <td><a href="{{ queen.get_absolute_url }}">{{ queen }}</a> </td>
+              <td>{{queen.is_active}} </td>
+              <td><a href="{% url 'queen_update' queen.pk %}">Update</a> </td>
+
+
+          </tr>
+
+      {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+      <p>нет маток...</p>
+    {% endif %}
+{% endblock %}

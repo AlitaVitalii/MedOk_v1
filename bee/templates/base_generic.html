@@ -43,10 +43,12 @@
       {% block sidebar %}
       <ul class="sidebar-nav">
           <li><a href="{% url 'index' %}">Home</a></li>
-          <li><a href="">Пчелосемьи</a></li>
-          <li><a href="">Матки</a></li>
-          <li><a href="">Журнал работ</a></li>
-          <li><a href="">Напоминания</a></li>
+          <li><a href="{% url 'beehives' %}">Пчелосемьи</a></li>
+          <li><a href="{% url 'queens' %}">Матки</a></li>
+          <li><a href="{% url 'rows' %}">Ряды</a></li>
+          ____
+          <li><a href="{% url 'actions' %}">Журнал работ</a></li>
+          <li><a href="{% url 'reminders' %}">Напоминания</a></li>
 
       </ul>
 

@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Журнал</h1>
+
+    <ul class="sidebar-nav">
+<!--            <li><a href="{% url 'action_create' 1 %}">Создать действие</a></li>-->
+    </ul>
+
+    {% if action_list %}
+    <ul>
+    <table class="table table-striped">
+         <tr>
+    <th>Дата</th>
+    <th>ПС</th>
+    <th>Работы</th>
+
+           </tr>
+
+      {% for action in action_list %}
+          <tr>
+              <td><a href="{{ action.get_absolute_url }}">{{ action.post_date }}</a> </td>
+              <td>{{action.beehive}} </td>
+              <td>{{action.text}} </td>
+          </tr>
+
+      {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+      <p>нет маток...</p>
+    {% endif %}
+{% endblock %}

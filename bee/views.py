@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Prefetch
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from bee.forms import RegisterForm
-from bee.models import Action, Beehive, Queen, Reminder
+from bee.models import Action, Beehive, Queen, Reminder, Row
 
 User = get_user_model()
 # Create your views here.
@@ -30,6 +30,7 @@ def index(request):
         }
     )
 
+
 """ Beehive - Улий или ПС. Можно созать, редактировать, просмотреть"""
 
 
@@ -44,14 +45,14 @@ class BeehiveDetailView(generic.DetailView):
 
 class BeehiveCreate(LoginRequiredMixin, generic.CreateView):
     model = Beehive
-    fields = ['number', 'row_num', 'type_hive', 'queen', 'title', 'text', 'volume', 'is_active']
+    fields = ['number', 'row', 'type_hive', 'queen', 'title', 'text', 'volume', 'is_active']
 
 
 class BeehiveUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Beehive
     fields = [
         'number',
-        'row_num',
+        'row',
         'type_hive',
         'queen',
         'title',
@@ -60,6 +61,7 @@ class BeehiveUpdate(LoginRequiredMixin, generic.UpdateView):
         'pub_date',
         'is_active'
     ]
+    queryset = Beehive.objects.filter(is_active=True)
 
 
 """ Queen  - Матка. Можно создать, редактировать, просмотреть"""
@@ -68,6 +70,8 @@ class BeehiveUpdate(LoginRequiredMixin, generic.UpdateView):
 class QueenListView(generic.ListView):
     model = Queen
     paginate_by = 10
+
+    # queryset = Queen.objects.filter(is_active=True)
 
 
 class QueenDetailView(generic.DetailView):
@@ -91,6 +95,8 @@ class ActionListView(generic.ListView):
     model = Action
     paginate_by = 10
 
+    # queryset = Action.objects.order_by('-post_date')
+
 
 class ActionDetailView(generic.DetailView):
     model = Action
@@ -100,10 +106,19 @@ class ActionCreate(LoginRequiredMixin, generic.CreateView):
     model = Action
     fields = ['text', 'post_date']
 
+    def form_valid(self, form):
+        # добавляем связь с Beehive
+        form.instance.beehive = get_object_or_404(Beehive, pk=self.kwargs['pk'])
+        return super(ActionCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        # после создания возращаемяс на связанный блог
+        return reverse('beehive_detail', kwargs={'pk': self.kwargs['pk'], })
+
 
 class ActionUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Action
-    fields = ['text', 'post_date']
+    fields = ['beehive', 'text', 'post_date']
 
 
 """ Reminder - напоминание к будущему осмотру. Можно создать, редактировать, просмотреть"""
@@ -114,18 +129,58 @@ class ReminderListView(generic.ListView):
     paginate_by = 10
 
 
-class ReminderDatailView(generic.DetailView):
+class ReminderDetailView(generic.DetailView):
     model = Reminder
 
 
 class ReminderCreate(LoginRequiredMixin, generic.CreateView):
     model = Reminder
-    fields = ['text', 'post-date', 'is_active']
+    fields = ['text', 'post_date', 'is_active']
+
+    def form_valid(self, form):
+        # добавляем связь с Beehive
+        form.instance.beehive = get_object_or_404(Beehive, pk=self.kwargs['pk'])
+        return super(ReminderCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        # после создания возращаемяс на связанный блог
+        return reverse('beehive_detail', kwargs={'pk': self.kwargs['pk'], })
+
+
+class ReminderCreat(LoginRequiredMixin, generic.CreateView):
+    model = Reminder
+    fields = ['beehive', 'text', 'post_date', 'is_active']
+
+    # def get_success_url(self):
+    #     # после создания возращаемяс на связанный блог
+    #     return reverse('reminder_list')
 
 
 class ReminderUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Reminder
-    fields = ['text', 'post-date', 'is_active']
+    fields = ['beehive', 'text', 'post_date', 'is_active']
+
+
+""" Ряр. Можно создать, редактировать, просмотреть"""
+
+
+class RowListView(generic.ListView):
+    model = Row
+    paginate_by = 10
+
+
+class RowDetailView(generic.DetailView):
+    model = Row
+
+
+class RowCreate(LoginRequiredMixin, generic.CreateView):
+    model = Row
+    fields = ['name']
+
+
+class RowUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Row
+    fields = ['name']
 
 
 """ Работа с User-ом"""
@@ -135,7 +190,6 @@ class UserListView(generic.ListView):
     model = User
     template_name = 'bee/user_list.html'
     paginate_by = 10
-
 
 
 class UserDetailView(generic.DetailView):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from bee.models import Action, Beehive, Queen, Reminder
+from bee.models import Action, Beehive, Queen, Reminder, Row
 
 
 @admin.register(Action)
@@ -22,9 +22,14 @@ class ReminderAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+@admin.register(Row)
+class RowAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
 @admin.register(Beehive)
 class BeehiveAdmin(admin.ModelAdmin):
-    list_display = ('number', 'row_num', 'queen', 'is_active')
+    list_display = ('number', 'row', 'queen', 'is_active')
     search_fields = ['number']
     list_filter = ['is_active']
 
