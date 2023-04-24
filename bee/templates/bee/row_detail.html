@@ -1,13 +1,28 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ row }}</h1>
+  <h1>Ряд: {{ row }}</h1>
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'row_update' row.pk %}">Row update</a></li>
     {% endif %}
    <p> <strong>Название: </strong> {{ row }} </p>
 
+<table class="table table-striped">
+         <tr>
+            <th>ПС</th>
+            <th>Матка</th>
+            <th>К-во корп.</th>
+         </tr>
 
+      {% for beehive in row.beehive_set.all %}
+          <tr>
+              <td><a href="{{ beehive.get_absolute_url }}">{{ beehive }}</a> </td>
+              <td>{{beehive.queen}} </td>
+              <td>{{beehive.get_volume_display}}</td>
+          </tr>
+
+      {% endfor %}
+      </table>
 
 
 {% endblock %}

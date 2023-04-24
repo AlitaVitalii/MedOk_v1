@@ -1,14 +1,31 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ queen }}</h1>
+  <h1>Матка: {{ queen }}</h1>
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'queen_update' queen.pk %}">Queen update</a></li>
     {% endif %}
    <p> <strong>Год: </strong> {{ queen.year }} </p>
    <p> <strong>Описание: </strong> {{ queen.title }} </p>
    <p> <strong>is_active: </strong> {{ queen.is_active }} </p>
+________________
 
+<table class="table table-striped">
+         <tr>
+            <th>ПС</th>
+            <th>Ряд</th>
+            <th>К-во корп.</th>
+         </tr>
+
+      {% for beehive in queen.beehive_set.all %}
+          <tr>
+              <td><a href="{{ beehive.get_absolute_url }}">{{ beehive }}</a> </td>
+              <td>{{beehive.row}} </td>
+              <td>{{beehive.get_volume_display}}</td>
+          </tr>
+
+      {% endfor %}
+      </table>
 
 
 

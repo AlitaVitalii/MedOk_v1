@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ beehive }}</h1>
+  <h1>Улей: {{ beehive }}</h1>
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'beehive_update' beehive.pk %}">Beehive update</a></li>
     {% endif %}
@@ -25,7 +25,7 @@ ____________________________________________
 
     {% for action in beehive.action_set.all %}
 
-    <p><strong>{{action.post_date}}:</strong> {{action.text}}</p>
+    <p><strong><a href="{% url 'action_update' action.pk %}">{{action.post_date}}:</a></strong> {{action.text}}</p>
 
     {% endfor %}
 

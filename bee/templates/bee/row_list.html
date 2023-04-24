@@ -14,11 +14,13 @@
     <table class="table table-striped">
          <tr>
     <th>Название</th>
+    <th>Изменить</th>
            </tr>
 
       {% for row in row_list %}
           <tr>
               <td><a href="{{ row.get_absolute_url }}">{{ row }}</a> </td>
+              <td><a href="{% url 'row_update' row.pk %}">Update</a> </td>
 
           </tr>
 

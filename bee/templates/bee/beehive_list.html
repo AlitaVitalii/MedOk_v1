@@ -11,22 +11,22 @@
 
     {% if beehive_list %}
     <ul>
-    <table class="table table-striped">
+    <table class="table table-striped table-hover table-sm">
          <tr>
     <th>ПС</th>
     <th>Ряд</th>
     <th>Матка</th>
-    <th>Title</th>
+<!--    <th>Title</th>-->
     <th>К-во корп.</th>
 
            </tr>
 
       {% for beehive in beehive_list %}
           <tr>
-              <td><a href="{{ beehive.get_absolute_url }}">{{ beehive.number }}</a> </td>
+              <td><a href="{{ beehive.get_absolute_url }}">{{ beehive }}</a> </td>
               <td>{{beehive.row}} </td>
               <td>{{beehive.queen}}</td>
-              <td>{{beehive.title}}</td>
+<!--              <td>{{beehive.title}}</td>-->
               <td>{{beehive.get_volume_display}}</td>
           </tr>
 

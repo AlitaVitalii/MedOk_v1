@@ -91,10 +91,11 @@ class Action(models.Model):
     post_date = models.DateField(default=date.today, verbose_name='Дата')
 
     class Meta:
-        ordering = ['-post_date']
+        ordering = ['-post_date', '-pk']
 
     def __str__(self):
-        return self.text
+        title_text = self.text[:25] + ('...' if len(self.text[:]) > 25 else '')
+        return title_text
 
     def get_absolute_url(self):
         return reverse('action_detail', args=[str(self.pk)])

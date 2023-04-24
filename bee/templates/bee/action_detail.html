@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>{{ action.beehive }}</h1>
+  <h1>Действие с ПС - {{ action.beehive }}</h1>
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'action_update' action.pk %}">Action update</a></li>
     {% endif %}
