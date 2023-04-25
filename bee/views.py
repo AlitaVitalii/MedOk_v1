@@ -37,6 +37,9 @@ def index(request):
 class BeehiveListView(generic.ListView):
     model = Beehive
     paginate_by = 10
+    # prefetch_actions = Prefetch('action_set', queryset=Action.objects.only('post_date'))
+    queryset = Beehive.objects.select_related('row', 'queen').filter(is_active=True)
+        # .prefetch_related('action_set')
 
 
 class BeehiveDetailView(generic.DetailView):
@@ -61,7 +64,7 @@ class BeehiveUpdate(LoginRequiredMixin, generic.UpdateView):
         'pub_date',
         'is_active'
     ]
-    queryset = Beehive.objects.filter(is_active=True)
+    # queryset = Beehive.objects.filter(is_active=True)
 
 
 """ Queen  - Матка. Можно создать, редактировать, просмотреть"""
@@ -71,11 +74,13 @@ class QueenListView(generic.ListView):
     model = Queen
     paginate_by = 10
 
-    # queryset = Queen.objects.filter(is_active=True)
+    queryset = Queen.objects.prefetch_related(
+        Prefetch('beehive_set', queryset=Beehive.objects.filter(is_active=True))).filter(is_active=True)
 
 
 class QueenDetailView(generic.DetailView):
     model = Queen
+    # queryset = Queen.objects.prefetch_related('beehive_set')
 
 
 class QueenCreate(LoginRequiredMixin, generic.CreateView):
@@ -95,7 +100,7 @@ class ActionListView(generic.ListView):
     model = Action
     paginate_by = 10
 
-    # queryset = Action.objects.order_by('-post_date')
+    queryset = Action.objects.select_related('beehive')
 
 
 class ActionDetailView(generic.DetailView):
@@ -127,6 +132,7 @@ class ActionUpdate(LoginRequiredMixin, generic.UpdateView):
 class ReminderListView(generic.ListView):
     model = Reminder
     paginate_by = 10
+    queryset = Reminder.objects.prefetch_related('beehive')
 
 
 class ReminderDetailView(generic.DetailView):
@@ -167,6 +173,9 @@ class ReminderUpdate(LoginRequiredMixin, generic.UpdateView):
 class RowListView(generic.ListView):
     model = Row
     paginate_by = 10
+    queryset = Row.objects.prefetch_related(
+        Prefetch('beehive_set', queryset=Beehive.objects.filter(is_active=True))
+    )
 
 
 class RowDetailView(generic.DetailView):

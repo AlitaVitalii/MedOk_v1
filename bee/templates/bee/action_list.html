@@ -12,14 +12,17 @@
     {% if action_list %}
     <ul>
     <table class="table table-striped">
+        <thead>
          <tr>
     <th>Дата</th>
     <th>ПС</th>
     <th>Работы</th>
 
-           </tr>
-
+            </tr>
+</thead>
+        <tbody>
       {% for action in action_list %}
+
           <tr>
               <td><a href="{{ action.get_absolute_url }}">{{ action.post_date }}</a> </td>
               <td>{{action.beehive}} </td>
@@ -27,8 +30,11 @@
           </tr>
 
       {% endfor %}
+        </tbody>
       </table>
     </ul>
+
+
     {% else %}
       <p>нет маток...</p>
     {% endif %}

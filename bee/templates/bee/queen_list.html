@@ -14,6 +14,7 @@
     <table class="table table-striped">
          <tr>
     <th>Матка</th>
+    <th>К-во ПС</th>
     <th>is_active</th>
     <th>Изменить</th>
 
@@ -23,6 +24,7 @@
       {% for queen in queen_list %}
           <tr>
               <td><a href="{{ queen.get_absolute_url }}">{{ queen }}</a> </td>
+              <td>{{queen.beehive_set.count}} </td>
               <td>{{queen.is_active}} </td>
               <td><a href="{% url 'queen_update' queen.pk %}">Update</a> </td>
 

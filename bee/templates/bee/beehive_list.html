@@ -16,7 +16,7 @@
     <th>ПС</th>
     <th>Ряд</th>
     <th>Матка</th>
-<!--    <th>Title</th>-->
+    <th>Последний осмотр</th>
     <th>К-во корп.</th>
 
            </tr>
@@ -26,7 +26,7 @@
               <td><a href="{{ beehive.get_absolute_url }}">{{ beehive }}</a> </td>
               <td>{{beehive.row}} </td>
               <td>{{beehive.queen}}</td>
-<!--              <td>{{beehive.title}}</td>-->
+              <td>{{beehive.action_set.last.post_date}}</td>
               <td>{{beehive.get_volume_display}}</td>
           </tr>
 
