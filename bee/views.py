@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
@@ -38,9 +38,16 @@ class BeehiveListView(generic.ListView):
     model = Beehive
     paginate_by = 10
     # prefetch_actions = Prefetch('action_set', queryset=Action.objects.only('post_date'))
-    queryset = Beehive.objects.select_related('row', 'queen').filter(is_active=True)
+    # queryset = Beehive.objects.select_related('row', 'queen').filter(is_active=True)
         # .prefetch_related('action_set')
-
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Beehive.objects.select_related('row', 'queen').filter(is_active=True).filter(
+                Q(number__icontains=query) | Q(title__icontains=query)
+            )
+        else:
+            return Beehive.objects.select_related('row', 'queen').filter(is_active=True)
 
 class BeehiveDetailView(generic.DetailView):
     model = Beehive
@@ -99,7 +106,7 @@ class QueenUpdate(LoginRequiredMixin, generic.UpdateView):
 class ActionListView(generic.ListView):
     model = Action
     paginate_by = 10
-
+    date_hierarchy = ['post_date']
     queryset = Action.objects.select_related('beehive')
 
 
