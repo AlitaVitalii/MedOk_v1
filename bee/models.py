@@ -116,3 +116,14 @@ class Reminder(models.Model):
 
     def get_absolute_url(self):
         return reverse('reminder_detail', args=[str(self.pk)])
+
+
+class Work(models.Model):
+    #  Запись групповых работ с ПС
+    text = models.TextField(max_length=1000, verbose_name='Текст')
+    beehive = models.ManyToManyField(Beehive, verbose_name='ПС')
+    post_date = models.DateField(default=date.today, verbose_name='Дата')
+
+    def get_absolute_url(self):
+        return reverse('reminder_detail', args=[str(self.pk)])
+
