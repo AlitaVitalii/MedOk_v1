@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Групповые/общие работы</h1>
+
+    <ul class="sidebar-nav">
+            <li><a href="{% url 'work_create' %}">Создать</a></li>
+    </ul>
+
+    {% if work_list %}
+    <ul>
+    <table class="table table-striped">
+         <tr>
+    <th>Дата</th>
+    <th>Описание работ</th>
+    <th>Пчелосемьи</th>
+<!--    <th>Изменить</th>-->
+           </tr>
+
+      {% for work in work_list %}
+          <tr>
+              <td><a href="{{ work.get_absolute_url }}">{{ work.post_date }}</a> </td>
+              <td>{{ work }}</td>
+              <td>{{ work.display_beehive }} </td>
+<!--              <td><a href="{% url 'work_update' work.pk %}">Update</a> </td>-->
+
+          </tr>
+
+      {% endfor %}
+      </table>
+    </ul>
+    {% else %}
+      <p>нет работ...</p>
+    {% endif %}
+{% endblock %}

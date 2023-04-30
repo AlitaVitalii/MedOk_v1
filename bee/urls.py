@@ -29,5 +29,11 @@ urlpatterns = [
     path('reminder/<int:pk>/create/', views.ReminderCreate.as_view(), name='reminder_create'),
     path('reminder/<int:pk>/update/', views.ReminderUpdate.as_view(), name='reminder_update'),
 
-    path('reminder/create/', views.ReminderCreat.as_view(), name='rem_create')
+    path('reminder/create/', views.ReminderCreat.as_view(), name='rem_create'),
+
+    path('work/', views.WorkListView.as_view(), name='works'),
+    path('work/<int:pk>/', views.WorkDetailView.as_view(), name='work_detail'),
+    path('work/create/', views.WorkCreate.as_view(), name='work_create'),
+    path('work/<int:pk>/update/', views.WorkUpdate.as_view(), name='work_update'),
+
 ]

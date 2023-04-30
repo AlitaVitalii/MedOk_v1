@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Дата: {{ work.post_date }}</h1>
+    {% if request.user.is_authenticated  %}
+        <li><a href="{% url 'work_update' work.pk %}">Update</a></li>
+    {% endif %}
+   <p> <strong>Работы: </strong> {{ work.text }} </p>
+<!--   <p> <strong>ПС: </strong> {{ work.beehive.all }} </p>-->
+   <p> <strong>ПС: </strong>
+            {% for beehive in work.beehive.all %}
+          <a href="{% url 'beehive_detail' beehive.pk %}">{{ beehive }}</a> ;
+          {% endfor %}</p>
+
+
+
+
+{% endblock %}

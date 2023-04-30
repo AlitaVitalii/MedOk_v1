@@ -125,5 +125,14 @@ class Work(models.Model):
     post_date = models.DateField(default=date.today, verbose_name='Дата')
 
     def get_absolute_url(self):
-        return reverse('reminder_detail', args=[str(self.pk)])
+        return reverse('work_detail', args=[str(self.pk)])
+
+    def display_beehive(self):
+        return ', '.join([str(beehive.number) for beehive in self.beehive.all()[:]])
+
+    display_beehive.short_description = 'Beehive'
+
+    def __str__(self):
+        title_text = self.text[:25] + ('...' if len(self.text[:]) > 25 else '')
+        return title_text
 

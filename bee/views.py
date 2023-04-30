@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from bee.forms import RegisterForm
-from bee.models import Action, Beehive, Queen, Reminder, Row
+from bee.models import Action, Beehive, Queen, Reminder, Row, Work
 
 User = get_user_model()
 # Create your views here.
@@ -197,6 +197,29 @@ class RowCreate(LoginRequiredMixin, generic.CreateView):
 class RowUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Row
     fields = ['name']
+
+
+""" Работа с групповыми действиями"""
+
+
+class WorkListView(generic.ListView):
+    model = Work
+    paginate_by = 10
+    queryset = Work.objects.order_by('-post_date')
+
+
+class WorkDetailView(generic.DetailView):
+    model = Work
+
+
+class WorkCreate(LoginRequiredMixin, generic.CreateView):
+    model = Work
+    fields = ['text', 'beehive', 'post_date']
+
+
+class WorkUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Work
+    fields = ['text', 'beehive', 'post_date']
 
 
 """ Работа с User-ом"""
