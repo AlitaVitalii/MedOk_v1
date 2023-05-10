@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
 from django.db.models import Prefetch, Q
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -121,6 +122,13 @@ class ActionCreate(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         # добавляем связь с Beehive
         form.instance.beehive = get_object_or_404(Beehive, pk=self.kwargs['pk'])
+        send_mail(
+            f"Действие к ПС №{form.instance.beehive}",
+            f" Улей: {form.instance.beehive.number}. \nДействие: {form.cleaned_data.get('text')}",
+            "alita.v@ukr.net",
+            ["alita.avs@gmail.com"],
+            fail_silently=False,
+        )
         return super(ActionCreate, self).form_valid(form)
 
     def get_success_url(self):
