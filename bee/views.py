@@ -1,3 +1,6 @@
+import os
+from environ import environ
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -11,6 +14,8 @@ from bee.forms import RegisterForm
 from bee.models import Action, Beehive, Queen, Reminder, Row, Work
 
 User = get_user_model()
+env = environ.Env()
+
 # Create your views here.
 
 
@@ -49,6 +54,7 @@ class BeehiveListView(generic.ListView):
             )
         else:
             return Beehive.objects.select_related('row', 'queen').filter(is_active=True)
+
 
 class BeehiveDetailView(generic.DetailView):
     model = Beehive
@@ -125,8 +131,8 @@ class ActionCreate(LoginRequiredMixin, generic.CreateView):
         send_mail(
             f"Действие к ПС №{form.instance.beehive}",
             f" Улей: {form.instance.beehive.number}. \nДействие: {form.cleaned_data.get('text')}",
-            "alita.v@ukr.net",
-            ["alita.avs@gmail.com"],
+            env('EMAIL'),
+            [env('EMAIL2')],
             fail_silently=False,
         )
         return super(ActionCreate, self).form_valid(form)
