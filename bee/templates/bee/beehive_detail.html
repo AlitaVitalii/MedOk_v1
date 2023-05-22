@@ -9,7 +9,7 @@
   <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>
 ____________________________________________
 
-    <table class="table table-striped table-hover table-sm">
+    <table class="table table-striped table-sm">
          <tr>
     <th>Дата создания</th>
     <th>Ряд</th>
@@ -39,15 +39,42 @@ ____________________________________________
    <p><strong>Описание:</strong> {{ beehive.text }}</p>
 <!--   <p>{{ beehive.text }}</p>-->
   <li><a href="{% url 'action_create' beehive.id %}">Новое событие</a></li>
-____________________________________________
+<!--____________________________________________-->
 
-  <p><strong>Action:</strong></p>
+<!--  <p><strong>Action:</strong></p>-->
 
-    {% for action in beehive.action_set.all %}
+<!--    {% for action in beehive.action_set.all %}-->
 
-    <p><strong><a href="{% url 'action_update' action.pk %}">{{action.post_date}}:</a></strong> {{action.text}}</p>
+<!--    <p><strong><a href="{% url 'action_update' action.pk %}">{{action.post_date}}:</a></strong> {{action.text}}</p>-->
 
-    {% endfor %}
+<!--    {% endfor %}-->
+
+
+____________________________________
+
+<!-- Вывод событий в хронологической последовательности -->
+<p><strong>События:</strong></p>
+
+  {% for event in events %}
+    {% if event.get_event_type == 'Action' %}
+    <p>[A] <strong><a href="{% url 'action_update' event.pk %}">{{ event.post_date }}</a> </strong>  {{ event.text }}</p>
+    {% elif event.get_event_type == 'Work' %}
+    <p>[W] <strong><a href="{% url 'work_detail' event.pk %}">{{ event.post_date }}</a> </strong> {{ event.text }}</p>
+    {% endif %}
+  {% empty %}
+    <li>Нет событий.</li>
+  {% endfor %}
+
+<!-- Пагинация -->
+<div class="pagination">
+  {% if events.has_previous %}
+    <a href="?page={{ events.previous_page_number }}"> Предыдущая </a>
+  {% endif %}
+  <span class="current-page"> {{ events.number }} </span>
+  {% if events.has_next %}
+    <a href="?page={{ events.next_page_number }}"> Следующая </a>
+  {% endif %}
+</div>
 
 
 {% endblock %}

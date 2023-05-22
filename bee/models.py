@@ -100,6 +100,10 @@ class Action(models.Model):
     def get_absolute_url(self):
         return reverse('action_detail', args=[str(self.pk)])
 
+    def get_event_type(self):
+        #  функция для отображения маркера
+        return 'Action'
+
 
 class Reminder(models.Model):
     #  Совет на будующий осмотр
@@ -136,3 +140,6 @@ class Work(models.Model):
         title_text = self.text[:25] + ('...' if len(self.text[:]) > 25 else '')
         return title_text
 
+    def get_event_type(self):
+        #  функция для отображения маркера
+        return 'Work'

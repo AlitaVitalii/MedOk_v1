@@ -1,4 +1,7 @@
-import os
+from itertools import chain
+from operator import attrgetter
+
+from django.core.paginator import Paginator
 from environ import environ
 
 from django.contrib.auth import get_user_model
@@ -46,6 +49,8 @@ class BeehiveListView(generic.ListView):
     # prefetch_actions = Prefetch('action_set', queryset=Action.objects.only('post_date'))
     # queryset = Beehive.objects.select_related('row', 'queen').filter(is_active=True)
         # .prefetch_related('action_set')
+
+
     def get_queryset(self):
         query = self.request.GET.get('q')
         if query:
@@ -58,6 +63,43 @@ class BeehiveListView(generic.ListView):
 
 class BeehiveDetailView(generic.DetailView):
     model = Beehive
+    template_name = 'bee/beehive_detail.html'
+    # context_object_name = 'beehive'
+    paginate_by = 5
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #
+    #     actions = Action.objects.filter(beehive=self.object)
+    #     works = Work.objects.filter(beehive=self.object)
+    #
+    #     # Объединяем события Action и Work
+    #     events = sorted(chain(actions, works), key=attrgetter('post_date'), reverse=True)
+    #
+    #     context['events'] = events
+    #     return context.
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        beehive = self.get_object()
+        actions = Action.objects.filter(beehive=beehive)
+        works = Work.objects.filter(beehive=beehive)
+
+        # Объединяем события из actions и works
+        events = sorted(
+            list(actions) + list(works),
+            key=lambda event: event.post_date,
+            reverse=True
+        )
+
+        paginator = Paginator(events, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context['events'] = page_obj
+        return context
+
 
 
 class BeehiveCreate(LoginRequiredMixin, generic.CreateView):
