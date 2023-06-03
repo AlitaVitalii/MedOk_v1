@@ -5,12 +5,14 @@
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'work_update' work.pk %}">Update</a></li>
     {% endif %}
+__________
    <p> <strong>Работы: </strong> {{ work.text }} </p>
+__________
 <!--   <p> <strong>ПС: </strong> {{ work.beehive.all }} </p>-->
    <p> <strong>ПС: </strong>
             {% for beehive in work.beehive.all %}
-          <a href="{% url 'beehive_detail' beehive.pk %}">{{ beehive }}</a> ;
-          {% endfor %}</p>
+          <p><a href="{% url 'beehive_detail' beehive.pk %}">{{ beehive }}</a> ;</p>
+          {% endfor %}
 
 
 

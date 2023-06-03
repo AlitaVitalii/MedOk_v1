@@ -24,8 +24,8 @@ class Queen(models.Model):
     title = models.CharField('Порода', max_length=100)
     is_active = models.BooleanField(default=True)
 
-    class Meta:
-        ordering = ['-year']
+    # class Meta:
+    #     ordering = ['-year']
 
     def __str__(self):
         return '%s, %s' % (self.year, self.title)
@@ -74,8 +74,8 @@ class Beehive(models.Model):
         max_length=1, choices=VOLUME_STATUS, verbose_name='К-во корпусов', blank=True, default=1)
     pub_date = models.DateField(default=date.today)
 
-    class Meta:
-        ordering = ['number']
+    # class Meta:
+    #     ordering = ['number']
 
     def __str__(self):
         return '%s, %s' % (self.number, self.title)
@@ -90,8 +90,8 @@ class Action(models.Model):
     text = models.TextField(max_length=1000, verbose_name='Действие')
     post_date = models.DateField(default=date.today, verbose_name='Дата')
 
-    class Meta:
-        ordering = ['-post_date', '-pk']
+    # class Meta:
+    #     ordering = ['-post_date', '-pk']
 
     def __str__(self):
         title_text = self.text[:25] + ('...' if len(self.text[:]) > 25 else '')
@@ -115,8 +115,8 @@ class Reminder(models.Model):
     def __str__(self):
         return self.text
 
-    class Meta:
-        ordering = ['-is_active', 'post_date']
+    # class Meta:
+    #     ordering = ['-is_active', 'post_date']
 
     def get_absolute_url(self):
         return reverse('reminder_detail', args=[str(self.pk)])
@@ -143,3 +143,12 @@ class Work(models.Model):
     def get_event_type(self):
         #  функция для отображения маркера
         return 'Work'
+
+
+class Honey(models.Model):
+    beehive = models.ForeignKey(Beehive, verbose_name='ПС', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+    post_date = models.DateField(default=date.today, verbose_name='Дата')
+
+    def __str__(self):
+        return '%s, %s' % (self.beehive, self.quantity)

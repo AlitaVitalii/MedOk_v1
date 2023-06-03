@@ -1,7 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Напоминание: {{ reminder.beehive }}</h1>
+  <h1>Напоминание: <a href="{% url 'beehive_detail' reminder.beehive.pk %}">{{ reminder.beehive }}</a> </h1>
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'reminder_update' reminder.pk %}">Reminder update</a></li>
     {% endif %}

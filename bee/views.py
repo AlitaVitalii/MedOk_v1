@@ -47,25 +47,29 @@ class BeehiveListView(generic.ListView):
     model = Beehive
     paginate_by = 10
     # prefetch_actions = Prefetch('action_set', queryset=Action.objects.only('post_date'))
-    # queryset = Beehive.objects.select_related('row', 'queen').filter(is_active=True)
+    # queryset = Beehive.objects.select_related(
+    #     'row', 'queen'
+    # ).prefetch_related(
+    #     'work_set', 'action_set'
+    # ).filter(is_active=True).order_by('number')
         # .prefetch_related('action_set')
 
 
     def get_queryset(self):
         query = self.request.GET.get('q')
         if query:
-            return Beehive.objects.select_related('row', 'queen').filter(is_active=True).filter(
+            return Beehive.objects.select_related('row', 'queen', ).filter(is_active=True).filter(
                 Q(number__icontains=query) | Q(title__icontains=query)
-            )
+            ).order_by('number')
         else:
-            return Beehive.objects.select_related('row', 'queen').filter(is_active=True)
+            return Beehive.objects.select_related('row', 'queen').filter(is_active=True).order_by('number')
 
 
 class BeehiveDetailView(generic.DetailView):
     model = Beehive
     template_name = 'bee/beehive_detail.html'
     # context_object_name = 'beehive'
-    paginate_by = 5
+    paginate_by = 10
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -82,9 +86,9 @@ class BeehiveDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        beehive = self.get_object()
-        actions = Action.objects.filter(beehive=beehive)
-        works = Work.objects.filter(beehive=beehive)
+        # beehive = self.get_object()
+        actions = Action.objects.filter(beehive=self.get_object())
+        works = Work.objects.filter(beehive=self.get_object())
 
         # Объединяем события из actions и works
         events = sorted(
@@ -100,6 +104,9 @@ class BeehiveDetailView(generic.DetailView):
         context['events'] = page_obj
         return context
 
+    queryset = Beehive.objects.prefetch_related(
+        Prefetch('reminder_set', queryset=Reminder.objects.filter(is_active=True))
+    )
 
 
 class BeehiveCreate(LoginRequiredMixin, generic.CreateView):
@@ -156,7 +163,7 @@ class ActionListView(generic.ListView):
     model = Action
     paginate_by = 10
     date_hierarchy = ['post_date']
-    queryset = Action.objects.select_related('beehive')
+    queryset = Action.objects.select_related('beehive').order_by('-post_date')
 
 
 class ActionDetailView(generic.DetailView):
@@ -195,7 +202,7 @@ class ActionUpdate(LoginRequiredMixin, generic.UpdateView):
 class ReminderListView(generic.ListView):
     model = Reminder
     paginate_by = 10
-    queryset = Reminder.objects.prefetch_related('beehive')
+    queryset = Reminder.objects.prefetch_related('beehive').order_by('-is_active')
 
 
 class ReminderDetailView(generic.DetailView):

@@ -2,12 +2,18 @@
 
 {% block content %}
   <h1>Улей: {{ beehive }}</h1>
+    {% for reminder in beehive.reminder_set.all %}
+    <p>NB!!! <strong><a href="{% url 'reminder_update' reminder.pk %}">{{ reminder.post_date }}:</a> </strong>{{reminder.text}}</p>
+    {% endfor %}
+  <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>
+
+___________________________________
     {% if request.user.is_authenticated  %}
         <li><a href="{% url 'beehive_update' beehive.pk %}">Beehive update</a></li>
     {% endif %}
 
-  <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>
-____________________________________________
+<!--  <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>-->
+
 
     <table class="table table-striped table-sm">
          <tr>
@@ -38,6 +44,7 @@ ____________________________________________
 
    <p><strong>Описание:</strong> {{ beehive.text }}</p>
 <!--   <p>{{ beehive.text }}</p>-->
+
   <li><a href="{% url 'action_create' beehive.id %}">Новое событие</a></li>
 <!--____________________________________________-->
 
@@ -50,7 +57,7 @@ ____________________________________________
 <!--    {% endfor %}-->
 
 
-____________________________________
+___________________________________
 
 <!-- Вывод событий в хронологической последовательности -->
 <p><strong>События:</strong></p>
