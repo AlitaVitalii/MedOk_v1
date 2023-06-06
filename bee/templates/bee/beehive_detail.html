@@ -5,7 +5,7 @@
     {% for reminder in beehive.reminder_set.all %}
     <p>NB!!! <strong><a href="{% url 'reminder_update' reminder.pk %}">{{ reminder.post_date }}:</a> </strong>{{reminder.text}}</p>
     {% endfor %}
-  <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>
+  <li><strong><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></strong></li>
 
 ___________________________________
     {% if request.user.is_authenticated  %}
@@ -44,12 +44,16 @@ ___________________________________
 
    <p><strong>Описание:</strong> {{ beehive.text }}</p>
 <!--   <p>{{ beehive.text }}</p>-->
+__________________________________
+  <p><strong>Отжали: {{ total_quantity }} рамок <a href="{% url 'honey_create' beehive.pk %}">Добавить рамки</a></strong></p>
 
-  <li><a href="{% url 'honey_create' beehive.pk %}">Добавить рамки</a></li>
+    {% for quantity in beehive.honey_set.all %}
+    <h6><strong><a href="{% url 'honey_update' beehive.pk %}">{{ quantity.post_date }}</a> </strong> - {{ quantity.quantity }} рамок</h6>
+    {% endfor %}
 
-___________________________________
+<!--___________________________________-->
 
-  <li><a href="{% url 'action_create' beehive.id %}">Новое событие</a></li>
+<!--  <li><a href="{% url 'action_create' beehive.id %}">Новое событие</a></li>-->
 <!--____________________________________________-->
 
 <!--  <p><strong>Action:</strong></p>-->
@@ -64,7 +68,7 @@ ___________________________________
 ___________________________________
 
 <!-- Вывод событий в хронологической последовательности -->
-<p><strong>События:</strong></p>
+<p><strong>События:<a href="{% url 'action_create' beehive.id %}">   Добавить событие</a></strong></p>
 
   {% for event in events %}
     {% if event.get_event_type == 'Action' %}

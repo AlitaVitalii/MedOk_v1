@@ -58,14 +58,6 @@ def index(request):
 class BeehiveListView(generic.ListView):
     model = Beehive
     paginate_by = 10
-    # prefetch_actions = Prefetch('action_set', queryset=Action.objects.only('post_date'))
-    # queryset = Beehive.objects.select_related(
-    #     'row', 'queen'
-    # ).prefetch_related(
-    #     'work_set', 'action_set'
-    # ).filter(is_active=True).order_by('number')
-        # .prefetch_related('action_set')
-
 
     def get_queryset(self):
         query = self.request.GET.get('q')
@@ -98,6 +90,11 @@ class BeehiveDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # подсчитываем сумму отобраных рамок
+        beehive = self.get_object()
+        total_quantity = beehive.honey_set.aggregate(total=Sum('quantity')).get('total')
+        context['total_quantity'] = total_quantity
+
         # beehive = self.get_object()
         actions = Action.objects.filter(beehive=self.get_object())
         works = Work.objects.filter(beehive=self.get_object())
@@ -117,7 +114,7 @@ class BeehiveDetailView(generic.DetailView):
         return context
 
     queryset = Beehive.objects.prefetch_related(
-        Prefetch('reminder_set', queryset=Reminder.objects.filter(is_active=True))
+        Prefetch('reminder_set', queryset=Reminder.objects.filter(is_active=True)),
     )
 
 
@@ -236,6 +233,7 @@ class ReminderCreate(LoginRequiredMixin, generic.CreateView):
 
 
 class ReminderCreat(LoginRequiredMixin, generic.CreateView):
+    #  для создания напоминалия в журнале
     model = Reminder
     fields = ['beehive', 'text', 'post_date', 'is_active']
 
@@ -290,7 +288,6 @@ class WorkDetailView(generic.DetailView):
 class WorkCreate(LoginRequiredMixin, generic.CreateView):
     model = Work
     fields = ['text', 'beehive', 'post_date']
-
 
 
 class WorkUpdate(LoginRequiredMixin, generic.UpdateView):
