@@ -36,4 +36,9 @@ urlpatterns = [
     path('work/create/', views.WorkCreate.as_view(), name='work_create'),
     path('work/<int:pk>/update/', views.WorkUpdate.as_view(), name='work_update'),
 
+    path('honey/', views.HoneyListView.as_view(), name='honeys'),
+    path('honey/<int:pk>/', views.HoneyDetailView.as_view(), name='honey_detail'),
+    path('honey/<int:pk>/create/', views.HoneyCreate.as_view(), name='honey_create'),
+    path('honey/<int:pk>/update/', views.HoneyUpdate.as_view(), name='honey_update'),
+
 ]

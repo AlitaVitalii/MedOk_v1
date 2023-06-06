@@ -152,3 +152,6 @@ class Honey(models.Model):
 
     def __str__(self):
         return '%s, %s' % (self.beehive, self.quantity)
+
+    def get_absolute_url(self):
+        return reverse('honey_detail', args=[str(self.pk)])

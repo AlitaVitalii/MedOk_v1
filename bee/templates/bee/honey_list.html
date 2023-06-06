@@ -1,0 +1,38 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+<h1>Журнал отбора медовых рамок))</h1>
+
+
+    {% if honey_list %}
+    <ul>
+    <table class="table table-striped table-sm">
+        <thead>
+         <tr>
+    <th>Дата</th>
+    <th>ПС</th>
+    <th>Кол-во</th>
+
+            </tr>
+</thead>
+        <tbody>
+      {% for honey in honey_list %}
+
+          <tr>
+              <td><a href="{{ honey.get_absolute_url }}">{{ honey.post_date }}</a> </td>
+              <td>{{honey.beehive}} </td>
+              <td>{{honey.quantity}} </td>
+          </tr>
+
+      {% endfor %}
+        </tbody>
+      </table>
+    </ul>
+
+
+    {% else %}
+      <p>Мёда нет...</p>
+    {% endif %}
+{% endblock %}

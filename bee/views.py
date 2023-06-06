@@ -8,13 +8,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Avg, Count, Sum, Max, Min
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from bee.forms import RegisterForm
-from bee.models import Action, Beehive, Queen, Reminder, Row, Work
+from bee.models import Action, Beehive, Queen, Reminder, Row, Work, Honey
 
 User = get_user_model()
 env = environ.Env()
@@ -27,6 +27,13 @@ def index(request):
     num_queen = Queen.objects.filter(is_active=True).count()
     num_action = Action.objects.count()
     num_reminder = Reminder.objects.filter(is_active=True).count()
+    aggr_honey = Honey.objects.aggregate(
+        Count('quantity'),
+        Sum('quantity'),
+        Avg('quantity'),
+        Max('quantity'),
+        Min('quantity'),
+    )
 
     return render(
         request,
@@ -36,6 +43,11 @@ def index(request):
             'num_queen': num_queen,
             'num_action': num_action,
             'num_reminder': num_reminder,
+            'avg_honey': round(aggr_honey['quantity__avg'], 2),
+            'count_honey': aggr_honey['quantity__count'],
+            'sum_honey': aggr_honey['quantity__sum'],
+            'max_honey': aggr_honey['quantity__max'],
+            'min_honey': aggr_honey['quantity__min'],
         }
     )
 
@@ -219,7 +231,7 @@ class ReminderCreate(LoginRequiredMixin, generic.CreateView):
         return super(ReminderCreate, self).form_valid(form)
 
     def get_success_url(self):
-        # после создания возращаемяс на связанный блог
+        # после создания возращаемяс на связанный beehive
         return reverse('beehive_detail', kwargs={'pk': self.kwargs['pk'], })
 
 
@@ -280,9 +292,42 @@ class WorkCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['text', 'beehive', 'post_date']
 
 
+
 class WorkUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Work
     fields = ['text', 'beehive', 'post_date']
+
+
+"""Дабота с количеством отобраных рамок медовых"""
+
+
+class HoneyListView(generic.ListView):
+    model = Honey
+    paginate_by = 10
+
+
+class HoneyDetailView(generic.DetailView):
+    model = Honey
+
+
+class HoneyCreate(LoginRequiredMixin, generic.CreateView):
+    model = Honey
+    fields = ['quantity', 'post_date']
+
+    def form_valid(self, form):
+        # добавляем связь с Beehive
+        form.instance.beehive = get_object_or_404(Beehive, pk=self.kwargs['pk'])
+        return super(HoneyCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        # после создания возращаемяс на связанный beehive
+        return reverse('beehive_detail', kwargs={'pk': self.kwargs['pk'], })
+
+
+
+class HoneyUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Honey
+    fields = ['beehive', 'quantity', 'post_date']
 
 
 """ Работа с User-ом"""
