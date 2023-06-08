@@ -2,6 +2,8 @@
 
 {% block content %}
   <h1>Улей: {{ beehive }}</h1>
+    <li><strong><a href="{% url 'beehive_create' %}">Новая ПС</a></strong></li>
+___
     {% for reminder in beehive.reminder_set.all %}
     <p>NB!!! <strong><a href="{% url 'reminder_update' reminder.pk %}">{{ reminder.post_date }}:</a> </strong>{{reminder.text}}</p>
     {% endfor %}
@@ -12,7 +14,7 @@ ___________________________________
         <li><a href="{% url 'beehive_update' beehive.pk %}">Beehive update</a></li>
     {% endif %}
 
-<!--  <li><a href="{% url 'reminder_create' beehive.id %}">Добавить напоминание</a></li>-->
+
 
 
     <table class="table table-striped table-sm">

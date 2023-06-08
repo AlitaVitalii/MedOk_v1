@@ -3,7 +3,9 @@
 {% block content %}
   <h1>Дата: {{ work.post_date }}</h1>
     {% if request.user.is_authenticated  %}
-        <li><a href="{% url 'work_update' work.pk %}">Update</a></li>
+        <li><strong><a href="{% url 'work_create' %}">Создать групповую работу</a></strong></li>
+        <li><strong><a href="{% url 'work_update' work.pk %}">Update</a></strong></li>
+
     {% endif %}
 __________
    <p> <strong>Работы: </strong> {{ work.text }} </p>

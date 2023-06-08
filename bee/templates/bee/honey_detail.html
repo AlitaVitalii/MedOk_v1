@@ -3,10 +3,11 @@
 {% block content %}
   <h1>ПС - {{ honey.beehive }}</h1>
     {% if request.user.is_authenticated  %}
-        <li><a href="{% url 'honey_update' honey.pk %}">Update</a></li>
+        <li><strong><a href="{% url 'honey_update' honey.pk %}">Update</a></strong></li>
     {% endif %}
+_____
    <p> <strong>Дата: </strong> {{ honey.post_date }} </p>
-   <p> <strong>Описание: </strong> {{ honey.quantity }} </p>
+   <p> <strong>Отжали: </strong> {{ honey.quantity }} рамок</p>
 
 
 

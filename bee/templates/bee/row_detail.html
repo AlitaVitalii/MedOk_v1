@@ -3,7 +3,8 @@
 {% block content %}
   <h1>Ряд: {{ row }}</h1>
     {% if request.user.is_authenticated  %}
-        <li><a href="{% url 'row_update' row.pk %}">Row update</a></li>
+        <li><strong><a href="{% url 'row_create' %}">Новый ряд</a></strong></li>
+        <li><strong><a href="{% url 'row_update' row.pk %}">Row update</a></strong></li>
     {% endif %}
    <p> <strong>Название: </strong> {{ row }} </p>
 

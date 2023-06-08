@@ -3,8 +3,9 @@
 {% block content %}
   <h1>Напоминание: <a href="{% url 'beehive_detail' reminder.beehive.pk %}">{{ reminder.beehive }}</a> </h1>
     {% if request.user.is_authenticated  %}
-        <li><a href="{% url 'reminder_update' reminder.pk %}">Reminder update</a></li>
+        <li><strong><a href="{% url 'reminder_update' reminder.pk %}">Reminder update</a></strong></li>
     {% endif %}
+_____
    <p> <strong>Название: </strong> {{ reminder }} </p>
    <p> <strong>Название: </strong> {{ reminder.is_active }} </p>
 

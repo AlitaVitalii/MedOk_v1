@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Матка: {{ queen }}</h1>
     {% if request.user.is_authenticated  %}
-        <li><a href="{% url 'queen_update' queen.pk %}">Queen update</a></li>
+        <li><strong><a href="{% url 'queen_update' queen.pk %}">Queen update</a></strong></li>
     {% endif %}
    <p> <strong>Год: </strong> {{ queen.year }} </p>
    <p> <strong>Описание: </strong> {{ queen.title }} </p>

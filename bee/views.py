@@ -63,7 +63,7 @@ class BeehiveListView(generic.ListView):
         query = self.request.GET.get('q')
         if query:
             return Beehive.objects.select_related('row', 'queen', ).filter(is_active=True).filter(
-                Q(number__icontains=query) | Q(title__icontains=query)
+                Q(number__icontains=query) or Q(title__icontains=query)
             ).order_by('number')
         else:
             return Beehive.objects.select_related('row', 'queen').filter(is_active=True).order_by('number')

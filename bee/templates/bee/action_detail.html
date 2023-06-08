@@ -3,8 +3,9 @@
 {% block content %}
   <h1>Действие с ПС - {{ action.beehive }}</h1>
     {% if request.user.is_authenticated  %}
-        <li><a href="{% url 'action_update' action.pk %}">Action update</a></li>
+        <li><strong><a href="{% url 'action_update' action.pk %}">Action update</a></strong></li>
     {% endif %}
+_____
    <p> <strong>Дата: </strong> {{ action.post_date }} </p>
    <p> <strong>Описание: </strong> {{ action.text }} </p>
 
