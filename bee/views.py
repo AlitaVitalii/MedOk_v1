@@ -72,20 +72,7 @@ class BeehiveListView(generic.ListView):
 class BeehiveDetailView(generic.DetailView):
     model = Beehive
     template_name = 'bee/beehive_detail.html'
-    # context_object_name = 'beehive'
     paginate_by = 10
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #
-    #     actions = Action.objects.filter(beehive=self.object)
-    #     works = Work.objects.filter(beehive=self.object)
-    #
-    #     # Объединяем события Action и Work
-    #     events = sorted(chain(actions, works), key=attrgetter('post_date'), reverse=True)
-    #
-    #     context['events'] = events
-    #     return context.
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -147,7 +134,9 @@ class QueenListView(generic.ListView):
     paginate_by = 10
 
     queryset = Queen.objects.prefetch_related(
-        Prefetch('beehive_set', queryset=Beehive.objects.filter(is_active=True))).filter(is_active=True)
+        Prefetch(
+            'beehive_set', queryset=Beehive.objects.filter(is_active=True))
+    ).filter(is_active=True).order_by('year')
 
 
 class QueenDetailView(generic.DetailView):
@@ -255,7 +244,7 @@ class RowListView(generic.ListView):
     paginate_by = 10
     queryset = Row.objects.prefetch_related(
         Prefetch('beehive_set', queryset=Beehive.objects.filter(is_active=True))
-    )
+    ).order_by('name')
 
 
 class RowDetailView(generic.DetailView):
@@ -278,7 +267,7 @@ class RowUpdate(LoginRequiredMixin, generic.UpdateView):
 class WorkListView(generic.ListView):
     model = Work
     paginate_by = 10
-    queryset = Work.objects.order_by('-post_date')
+    queryset = Work.objects.prefetch_related('beehive').order_by('-post_date')
 
 
 class WorkDetailView(generic.DetailView):
@@ -301,6 +290,7 @@ class WorkUpdate(LoginRequiredMixin, generic.UpdateView):
 class HoneyListView(generic.ListView):
     model = Honey
     paginate_by = 10
+    queryset = Honey.objects.select_related('beehive').order_by('post_date')
 
 
 class HoneyDetailView(generic.DetailView):
