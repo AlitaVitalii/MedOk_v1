@@ -176,13 +176,13 @@ class ActionCreate(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         # добавляем связь с Beehive
         form.instance.beehive = get_object_or_404(Beehive, pk=self.kwargs['pk'])
-        send_mail(
-            f"Действие к ПС №{form.instance.beehive}",
-            f" Улей: {form.instance.beehive.number}. \nДействие: {form.cleaned_data.get('text')}",
-            env('EMAIL'),
-            [env('EMAIL2')],
-            fail_silently=False,
-        )
+        # send_mail(
+        #     f"Действие к ПС №{form.instance.beehive}",
+        #     f" Улей: {form.instance.beehive.number}. \nДействие: {form.cleaned_data.get('text')}",
+        #     env('EMAIL'),
+        #     [env('EMAIL2')],
+        #     fail_silently=False,
+        # )
         return super(ActionCreate, self).form_valid(form)
 
     def get_success_url(self):
