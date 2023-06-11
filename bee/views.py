@@ -102,6 +102,7 @@ class BeehiveDetailView(generic.DetailView):
 
     queryset = Beehive.objects.prefetch_related(
         Prefetch('reminder_set', queryset=Reminder.objects.filter(is_active=True)),
+
     )
 
 
@@ -311,7 +312,6 @@ class HoneyCreate(LoginRequiredMixin, generic.CreateView):
         return reverse('beehive_detail', kwargs={'pk': self.kwargs['pk'], })
 
 
-
 class HoneyUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Honey
     fields = ['beehive', 'quantity', 'post_date']
@@ -362,4 +362,3 @@ class UpdateProfile(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView)
     def get_object(self, queryset=None):
         user = self.request.user
         return user
-
