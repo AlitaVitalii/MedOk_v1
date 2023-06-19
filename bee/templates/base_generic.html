@@ -4,17 +4,21 @@
 <link rel="icon" href="data:;base64,=">
   {% block title %}<title>Beehive</title>{% endblock %}
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-          crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
-          integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
-          crossorigin="anonymous"></script>
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"-->
+<!--        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">-->
+<!--      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+
+<!--      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"-->
+<!--          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"-->
+<!--          crossorigin="anonymous"></script>-->
+<!--      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"-->
+<!--          integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"-->
+<!--          crossorigin="anonymous"></script>-->
 {% load static %}
     <script src="{% static 'js/mail.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -26,35 +30,57 @@
   <div class="container-fluid">
 
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %} >
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-        {{ message }}
-    </li>
-    {% endfor %}
+    <div class="row">
+      <div class="col-sm-12">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible text-center" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <strong>{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}
+              {{ message.tags|title }}{% endif %}!</strong> {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
 </ul>
 {% endif %}
-
-      <div class="container-fluid">
 
     <div class="row">
       <div class="col-sm-2">
       {% block sidebar %}
-      <ul class="sidebar-nav">
-          <li><a href="{% url 'index' %}">Home</a></li>
-          <li><a href="{% url 'beehives' %}">Пчелосемьи</a></li>
-          <li><a href="{% url 'queens' %}">Матки</a></li>
-          <li><a href="{% url 'rows' %}">Ряды</a></li>
-          ____
-          <li><a href="{% url 'reminders' %}">Напоминания</a></li>
-          <li><a href="{% url 'works' %}">Групповые работы</a></li>
-          <li><a href="{% url 'actions' %}">Журнал работ</a></li>
-          <li><a href="{% url 'honeys' %}">Медовые рамки</a></li>
 
 
 
-      </ul>
+          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+
+  <a class="btn btn-outline-primary " href="{% url 'index' %}" >Home</a>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'beehives' %}">Пчелосемьи</a>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'queens' %}">Матки</a>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'rows' %}">Ряды</a>
+
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'reminders' %}">Напоминания</a>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'works' %}">Групповые работы</a>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'actions' %}">Журнал работ</a>
+  <a class="btn btn-outline-primary btn-sm" href="{% url 'honeys' %}">Медовые рамки</a>
+
+
+</div>
+
+
+<!--      <ul class="sidebar-nav">-->
+<!--          <li><a href="{% url 'index' %}">Home</a></li>-->
+<!--          <li><a href="{% url 'beehives' %}">Пчелосемьи</a></li>-->
+<!--          <li><a href="{% url 'queens' %}">Матки</a></li>-->
+<!--          <li><a href="{% url 'rows' %}">Ряды</a></li>-->
+<!--          ____-->
+<!--          <li><a href="{% url 'reminders' %}">Напоминания</a></li>-->
+<!--          <li><a href="{% url 'works' %}">Групповые работы</a></li>-->
+<!--          <li><a href="{% url 'actions' %}">Журнал работ</a></li>-->
+<!--          <li><a href="{% url 'honeys' %}">Медовые рамки</a></li>-->
+
+
+
+<!--      </ul>-->
 
   <div class="modal fade" id="modal-mail">
     <div class="modal-dialog">
