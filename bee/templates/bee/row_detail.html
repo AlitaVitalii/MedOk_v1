@@ -20,7 +20,18 @@
           <tr>
               <td><a href="{{ beehive.get_absolute_url }}">{{ beehive }}</a> </td>
               <td>{{beehive.queen}} </td>
-              <td>{{beehive.action_set.last.post_date}} </td>
+              <td>
+                  {% if beehive.action_set.last.post_date > beehive.work_set.last.post_date %}
+                  {{beehive.action_set.last.post_date}}
+                  {% else %}
+                  {{ beehive.work_set.last.post_date}}
+                  {% endif %}
+
+                  {% if beehive.action_set.last.post_date and not beehive.work_set.last.post_date %}
+                  {{beehive.action_set.last.post_date}}
+                  {% endif %}
+
+              </td>
               <td>{{beehive.get_volume_display}}</td>
           </tr>
 
